@@ -16,20 +16,23 @@ int wykrywanieCzyDziala = 0;
 
 
 
+int wybranyElementMenu = 0;
+
 double predkosc = 1;
 
 int iloscPowturzen[2] = {0,0};
 
+int punktacja[2] = {0, 0};
+
 int kierunekDocelowy = 0;
 
-
+int iloscPowtorzenWroga[2] = {0,0};
 
 double pilka[2] = { 50, 75 };
 
 int paletkaGracza[2] = {50,140};
 
 int paletkaWroga[2] = {50,10};
-
 
 int test = 1;
 
@@ -185,12 +188,29 @@ int odbijaniePrzeciwnika() {
 
             if (szybkiBool) {
                 if (wysokosc > wysokoscPilki) {
-                    paletkaWroga[0] = paletkaWroga[0] - 5;
+
+                    iloscPowtorzenWroga[0]++;
+
+                    if (iloscPowtorzenWroga[0] > 4) {
+                        iloscPowtorzenWroga[0] = 0;
+                    }
+
+                    paletkaWroga[0] = paletkaWroga[0] - iloscPowtorzenWroga[0];
                 }
                 else
                 {
-                    paletkaWroga[0] = paletkaWroga[0] + 5;
+                    iloscPowtorzenWroga[1]++;
+                    if (iloscPowtorzenWroga[1] > 4) {
+                        iloscPowtorzenWroga[1] = 0;
+                    }
+
+
+                    paletkaWroga[0] = paletkaWroga[0] + iloscPowtorzenWroga[1];
                 }
+            }
+            else {
+                iloscPowtorzenWroga[0] = 0;
+                iloscPowtorzenWroga[1] = 0;
             }
         }
 
@@ -367,85 +387,192 @@ int main() {
     SDL_Event zdarzenie;
 
 
-
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    int czyGraOdpalona = 0;
 
     while (dzialaMeow) {
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-
-        //Ustawienia Wszystkiego na Czarno
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            for (int i = 0; i < 150; i++) {
-                for (int j = 0; j < 100; j++) {
-                    SDL_RenderDrawPoint(renderer, i, j);
-                }
-            }
 
-
-        //obramowki
-        SDL_SetRenderDrawColor(renderer, 90, 90, 0, 255);
         for (int i = 0; i < 150; i++) {
-            SDL_RenderDrawPoint(renderer, i, 0);
-            SDL_RenderDrawPoint(renderer, i, 99);
-        }
-        for (int i = 0; i < 100; i++) {
-            SDL_RenderDrawPoint(renderer, 0, i);
-            SDL_RenderDrawPoint(renderer, 149, i);
+            for (int j = 0; j < 100; j++) {
+                SDL_RenderDrawPoint(renderer, i, j);
+            }
         }
 
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        if (!czyGraOdpalona) {
 
 
 
-        int rysunekLini = 0;
-        int licznik = 0;
-        while (1) {
+        //Buttons
 
-            SDL_RenderDrawPoint(renderer, 75, rysunekLini);
+        for (int i = 0; i < 21; i = i + 20) {
 
-            if (licznik == 3) {
-                licznik = 0;
-                rysunekLini = rysunekLini + 3;
+
+            SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
+
+            if (i / 20 == wybranyElementMenu) {
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             }
             else {
-                rysunekLini++;
-                licznik++;
+                SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
             }
 
-            if (rysunekLini > 99) {break;}
-        }
 
-
-        //pilka
-
-        odbijaniePilki();
-
-
-        odbijanieIPchanie();
-
-
-        if (!(odbicieBool && odbicieWrogaBool))
-        {
-            if (pilka[1] < 0 || pilka[1] > 149) {
-                resetGry();
+            for (int j = 49; j < 100; j++) {
+                SDL_RenderDrawPoint(renderer, j, 45 +i);
+                SDL_RenderDrawPoint(renderer, j, 60+i);
+            }
+            for (int j = 45; j < 61; j++) {
+                SDL_RenderDrawPoint(renderer, 49, j+i);
+                SDL_RenderDrawPoint(renderer, 100, j+i);
             }
         }
 
-        for (int i = -3; i < 4; i++) {
-            for (int j = -3; j < 4; j++) {
-                if (pilka[1] < 149 && pilka[1] > -1 && pilka[0] > -1 && pilka[0] < 99) {
-                    SDL_RenderDrawPoint(renderer, pilka[1] + i, pilka[0]+j);
+            //Napisy
+
+
+
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+            int szerokosc = 57;
+            int licznikFajny = 0;
+            double licznikFajnyDwa = 0;
+            double licznikFajnyTrzy = 0;
+
+            for (int i = 48; i < 58; i++) {
+
+                SDL_RenderDrawPoint(renderer, szerokosc, i);
+                if (i < 54) {
+                    SDL_RenderDrawPoint(renderer, szerokosc +5, i);
+
+                    SDL_RenderDrawPoint(renderer, szerokosc +27+(int)licznikFajnyTrzy, i);
+                    SDL_RenderDrawPoint(renderer, szerokosc +28+(int)licznikFajnyTrzy, i);
+                    licznikFajnyTrzy = licznikFajnyTrzy + 0.50;
+                }
+
+                if (i == 53 || i == 48) {
+                    for (int j = szerokosc ; j < szerokosc +5; j++)
+                    {
+                        SDL_RenderDrawPoint(renderer, j+1, i);
+                    }
+                }
+                SDL_RenderDrawPoint(renderer, szerokosc +15, i);
+                SDL_RenderDrawPoint(renderer, szerokosc +8, i);
+
+                if (i == 57) {
+                    for (int j = szerokosc + 9; j < szerokosc +13; j++) {
+                        SDL_RenderDrawPoint(renderer, j, i);
+                    }
+
+                }
+
+                SDL_RenderDrawPoint(renderer, szerokosc +15+licznikFajny, i);
+                SDL_RenderDrawPoint(renderer, szerokosc +16+licznikFajny, i);
+                licznikFajny = licznikFajny + 1;
+
+                SDL_RenderDrawPoint(renderer, szerokosc +33+(int)licznikFajnyDwa, i);
+                SDL_RenderDrawPoint(renderer, szerokosc +34+(int)licznikFajnyDwa, i);
+                licznikFajnyDwa = licznikFajnyDwa - 0.50;
+
+
+                if ( i == 53) {
+                    for (int b = szerokosc + 15; b < szerokosc +22; b++) {
+                        SDL_RenderDrawPoint(renderer, b , i);
+                    }
+                }
+
+
+            }
+
+
+
+
+
+
+        }
+        else  {
+
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+
+            //Ustawienia Wszystkiego na Czarno
+            // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            // for (int i = 0; i < 150; i++) {
+            //     for (int j = 0; j < 100; j++) {
+            //         SDL_RenderDrawPoint(renderer, i, j);
+            //     }
+            // }
+
+
+            //obramowki
+            SDL_SetRenderDrawColor(renderer, 90, 90, 0, 255);
+            for (int i = 0; i < 150; i++) {
+                SDL_RenderDrawPoint(renderer, i, 0);
+                SDL_RenderDrawPoint(renderer, i, 99);
+            }
+            for (int i = 0; i < 100; i++) {
+                SDL_RenderDrawPoint(renderer, 0, i);
+                SDL_RenderDrawPoint(renderer, 149, i);
+            }
+
+
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+
+
+            int rysunekLini = 0;
+            int licznik = 0;
+            while (1) {
+
+                SDL_RenderDrawPoint(renderer, 75, rysunekLini);
+
+                if (licznik == 3) {
+                    licznik = 0;
+                    rysunekLini = rysunekLini + 3;
+                }
+                else {
+                    rysunekLini++;
+                    licznik++;
+                }
+
+                if (rysunekLini > 99) {break;}
+            }
+
+
+            //pilka
+
+            odbijaniePilki();
+
+
+            odbijanieIPchanie();
+
+
+            if (!(odbicieBool && odbicieWrogaBool))
+            {
+                if (pilka[1] < 0 ) {
+                    punktacja[1]++;
+                    resetGry();
+                }
+                else if (pilka[1] > 149) {
+                    punktacja[0]++;
+                    resetGry();
                 }
             }
-        }
+
+            for (int i = -3; i < 4; i++) {
+                for (int j = -3; j < 4; j++) {
+                    if (pilka[1] < 149 && pilka[1] > -1 && pilka[0] > -1 && pilka[0] < 99) {
+                        SDL_RenderDrawPoint(renderer, pilka[1] + i, pilka[0]+j);
+                    }
+                }
+            }
 
 
-        //paletki
+            //paletki
 
-        paletkiMeow();
+            paletkiMeow();
 
 
             for (int i = -8; i < 9; i++) {
@@ -457,51 +584,59 @@ int main() {
             }
 
 
-        //odbijaniePrzeciwnika
-        odbijaniePrzeciwnika();
+            //odbijaniePrzeciwnika
+            odbijaniePrzeciwnika();
 
 
 
-        //nyga
-        //for (int i = 0; i < 10; i++) {
-        odbijaniePilki();
+            //nyga
+            //for (int i = 0; i < 10; i++) {
+            odbijaniePilki();
 
 
 
-        //testowy migający piksel
+            //testowy migający piksel
 
-        if (test) {
+            if (test) {
 
-            if (wykrywanieCzyDziala) {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                if (wykrywanieCzyDziala) {
+                    SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                }
+                else {
+                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                }
+
+                SDL_RenderDrawPoint(renderer, 1, 1);
+
+                test = 0;
             }
             else {
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+                SDL_RenderDrawPoint(renderer, 1, 1);
+
+                test = 1;
             }
 
 
-            SDL_RenderDrawPoint(renderer, 1, 1);
+            if (predkosc < 0.05) {
+                resetGry();
+                printf("fsfs Meow meow \n");
+            }
 
-            test = 0;
+            //wyniki
+            SDL_SetRenderDrawColor(renderer, 240, 146, 193, 255);
+
+            for (int i = 0; i < punktacja[0]*2; i = i + 2) {
+                SDL_RenderDrawPoint(renderer, i + 5, 5);
+            }
+
+            for (int i = 149; i > 149 - punktacja[1]*2; i = i - 2) {
+                SDL_RenderDrawPoint(renderer, i - 5, 5);
+            }
+
+
         }
-        else {
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-
-
-
-            SDL_RenderDrawPoint(renderer, 1, 1);
-
-            test = 1;
-        }
-
-
-        if (predkosc < 0.05) {
-            resetGry();
-            printf("fsfs Meow meow \n");
-        }
-
-
 
         //obsługa błędów
         while (SDL_PollEvent(&zdarzenie)) {
@@ -513,10 +648,18 @@ int main() {
             {
                 if (zdarzenie.key.keysym.sym == SDLK_w) {
                     paletkaStrona = 1;
+                    wybranyElementMenu--;
+                    if (wybranyElementMenu < 0) {
+                        wybranyElementMenu = 1;
+                    }
                 }
                 else if (zdarzenie.key.keysym.sym == SDLK_s)
                 {
                     paletkaStrona = 2;
+                    wybranyElementMenu++;
+                    if (wybranyElementMenu > 1) {
+                        wybranyElementMenu = 0;
+                    }
                 }
                 else if (zdarzenie.key.keysym.sym == SDLK_r) {
                     resetGry();
@@ -524,11 +667,34 @@ int main() {
                 else if (zdarzenie.key.keysym.sym == SDLK_p) {
                     predkosc++;
                 }
+                else if (zdarzenie.key.keysym.sym == SDLK_SPACE) {
+                    if (wybranyElementMenu == 0) {
+                        resetGry();
+                        czyGraOdpalona = 1;
+                    }
+                }
 
             }
         }
+
+        for (int i = 0; i < 2; i++) {
+            if (punktacja[i] > 4) {
+
+                czyGraOdpalona = 0;
+
+                wybranyElementMenu = 0;
+
+                punktacja[0] = 0;
+                punktacja[1] = 0;
+                resetGry();
+            }
+
+        }
+
+
         SDL_Delay(33);
         SDL_RenderPresent(renderer);
+
 
     }
 
