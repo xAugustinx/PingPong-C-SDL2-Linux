@@ -11,26 +11,34 @@ int paletkaStrona = 0;
 
 double kierunek[2] = { 0, 1 };
 
-double predkosc = 2;
-
-double pilka[2] = { 50, 75 };
+int wykrywanieCzyDziala = 0;
 
 
-double przechowanaWartoscDlaKierunku = 0;
+
+
+double predkosc = 1;
+
+int iloscPowturzen[2] = {0,0};
 
 int kierunekDocelowy = 0;
 
-int odbicieBool = 0;
+
+
+double pilka[2] = { 50, 75 };
 
 int paletkaGracza[2] = {50,140};
 
 int paletkaWroga[2] = {50,10};
 
+
 int test = 1;
 
-
+int odbicieBool = 0;
 int odbicieWrogaBool = 0;
-int przechowanaWartoscDlaKierunkuWroga = 0;
+
+
+double przechowanaWartoscDlaKierunku = 0;
+double przechowanaWartoscDlaKierunkuWroga = 0;
 
 
 
@@ -47,7 +55,7 @@ int resetGry() {
     paletkaStrona = 0;
 
     kierunek[0] = 0;
-    kierunek[1] = 5;
+    kierunek[1] = 1;
 
     predkosc = 1;
 
@@ -74,14 +82,15 @@ int odbijaniePilki() {
                     }
 
                     if (paletkaGracza[0]+i == (int)pilka[0]+w && paletkaGracza[1]+s <= (int)pilka[1]+a ) {
-                        pilka[1] = paletkaGracza[1]-9;
+
+                        pilka[1] = paletkaGracza[1]-10;
                         odbicieBool = 1;
 
                         if (i == 0) {
                             i = 1;
                         }
 
-                        if (i < 0 && s > 0 || i >0 && s < 0) {
+                        if (i < 0 && s > 0 || i > 0 && s < 0) {
                             s = s * -1;
                         }
 
@@ -121,7 +130,7 @@ int odbijaniePilki() {
 
 
                     if (paletkaWroga[0]+i == (int)pilka[0]+w && paletkaWroga[1]+s >= (int)pilka[1]+a ) {
-                        pilka[1] = paletkaWroga[1]+9;
+                        pilka[1] = paletkaWroga[1]+10;
                         odbicieWrogaBool = 1;
 
                         if (i == 0) {
@@ -135,11 +144,18 @@ int odbijaniePilki() {
                         przechowanaWartoscDlaKierunkuWroga = (i + s) / 2;
 
 
+                        printf("nyga\n");
+
                         if (i == 0) {
-                            przechowanaWartoscDlaKierunku = 1;
+                            przechowanaWartoscDlaKierunkuWroga = 1;
                         }
 
+                        printf("nyga \n");
 
+
+                        if (przechowanaWartoscDlaKierunkuWroga == 0) {
+                            przechowanaWartoscDlaKierunkuWroga = 1;
+                        }
 
                     }
 
@@ -218,40 +234,70 @@ int odbijanieIPchanie() {
         }
 
 
-        kierunek[0] = ((1 - 1 / przechowanaWartoscDlaKierunku ) * dodatek); /// 1.5;
-        kierunek[1] = ((1 / przechowanaWartoscDlaKierunku / 1.6 ) * dodatek * -1); /// 1.5;  //
+        przechowanaWartoscDlaKierunku = przechowanaWartoscDlaKierunku / 2;
 
-        predkosc = predkosc * 3;
-        //
+        kierunek[0] = ((1 - 1 / przechowanaWartoscDlaKierunku ) * dodatek); /// 1.5;
+        kierunek[1] = ((1 / przechowanaWartoscDlaKierunku  ) * dodatek * -1); /// 1.5;  //
+
+        if (przechowanaWartoscDlaKierunku <= 1 && przechowanaWartoscDlaKierunku >= 0) {
+            kierunek[1] = -1;
+            kierunek[0] = 0;
+        }
+
+        if (przechowanaWartoscDlaKierunku >= 2 || przechowanaWartoscDlaKierunku <= -2 ) {
+
+
+            int superZmienna = 1;
+
+            if (przechowanaWartoscDlaKierunku < 0) {
+                superZmienna = superZmienna * -1;
+            }
+            predkosc = predkosc * (przechowanaWartoscDlaKierunku / 2) * superZmienna;
+        }
 
         odbicieBool = 0;
     }
 
     if (odbicieWrogaBool) {
 
-
         int dodatek = -1;
 
-        if (przechowanaWartoscDlaKierunku > 0) {
+        if (przechowanaWartoscDlaKierunkuWroga > 0) {
             dodatek = 1;
         }
 
 
-        kierunek[0] = (1 - 1 / przechowanaWartoscDlaKierunkuWroga  ) *dodatek;
-        kierunek[1] = (1 / przechowanaWartoscDlaKierunkuWroga) * dodatek * -1;  //
+        przechowanaWartoscDlaKierunkuWroga = przechowanaWartoscDlaKierunkuWroga / 2;
 
-        predkosc = predkosc * 3;
-        //
+        kierunek[0] = ((1 - 1 / przechowanaWartoscDlaKierunkuWroga ) * dodatek); /// 1.5;
+        kierunek[1] = ((1 / przechowanaWartoscDlaKierunkuWroga  ) * dodatek * -1); /// 1.5;  //
+
+        if (przechowanaWartoscDlaKierunkuWroga <= 1 && przechowanaWartoscDlaKierunkuWroga >= 0) {
+            kierunek[1] = -1;
+            kierunek[0] = 0;
+        }
+
+        if (przechowanaWartoscDlaKierunkuWroga >= 2 || przechowanaWartoscDlaKierunkuWroga <= -2 ) {
+
+
+            int superZmienna = 1;
+
+            if (przechowanaWartoscDlaKierunkuWroga < 0) {
+                superZmienna = superZmienna * -1;
+            }
+            predkosc = predkosc * (przechowanaWartoscDlaKierunkuWroga / 2) * superZmienna;
+        }
 
         odbicieWrogaBool = 0;
 
+        kierunek[0] = kierunek[0];
+        kierunek[1] = kierunek[1] * -1;
+
     }
 
-    if (pilka[1] < 0 || pilka[1] > 149) {
-        resetGry();
-    }
 
-    predkosc = predkosc - (predkosc/1000);
+
+    predkosc = predkosc - (predkosc/1000) /2;
 
 
 
@@ -261,7 +307,12 @@ int paletkiMeow() {
 
     if (paletkaStrona == 1) {
 
-        paletkaGracza[0] = paletkaGracza[0] - 4;
+        if (iloscPowturzen[0] < 5) {
+            iloscPowturzen[0]++;
+        }
+
+
+        paletkaGracza[0] = paletkaGracza[0] - 1 * iloscPowturzen[0];
 
         if (paletkaGracza[0] < 8) {
             paletkaGracza[0] = 8;
@@ -270,13 +321,24 @@ int paletkiMeow() {
     }
     else if (paletkaStrona == 2)
     {
-        paletkaGracza[0] = paletkaGracza[0] + 4;
+
+        if (iloscPowturzen[1] < 5) {
+            iloscPowturzen[1]++;
+        }
+
+        paletkaGracza[0] = paletkaGracza[0] + 1 * iloscPowturzen[1];
 
         if (paletkaGracza[0] > 91) {
             paletkaGracza[0] = 91;
         }
 
     }
+    else
+    {
+        iloscPowturzen[0] = 0;
+        iloscPowturzen[1] = 0;
+    }
+
     paletkaStrona = 0;
 
 }
@@ -359,7 +421,18 @@ int main() {
 
         //pilka
 
+        odbijaniePilki();
+
+
         odbijanieIPchanie();
+
+
+        if (!(odbicieBool && odbicieWrogaBool))
+        {
+            if (pilka[1] < 0 || pilka[1] > 149) {
+                resetGry();
+            }
+        }
 
         for (int i = -3; i < 4; i++) {
             for (int j = -3; j < 4; j++) {
@@ -368,6 +441,7 @@ int main() {
                 }
             }
         }
+
 
         //paletki
 
@@ -397,7 +471,14 @@ int main() {
         //testowy migający piksel
 
         if (test) {
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+            if (wykrywanieCzyDziala) {
+                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+            }
+            else {
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            }
+
 
             SDL_RenderDrawPoint(renderer, 1, 1);
 
@@ -405,6 +486,9 @@ int main() {
         }
         else {
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+
+
 
             SDL_RenderDrawPoint(renderer, 1, 1);
 
@@ -414,6 +498,7 @@ int main() {
 
         if (predkosc < 0.05) {
             resetGry();
+            printf("fsfs Meow meow \n");
         }
 
 
@@ -442,7 +527,7 @@ int main() {
 
             }
         }
-        SDL_Delay(100);
+        SDL_Delay(33);
         SDL_RenderPresent(renderer);
 
     }
