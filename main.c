@@ -6,15 +6,23 @@
 #include <time.h>
 
 
+//Bolls
 
-int paletkaStrona = 0;
+int test = 1;
 
-double kierunek[2] = { 0, 1 };
+int odbicieBool = 0;
+int odbicieWrogaBool = 0;
 
 int wykrywanieCzyDziala = 0;
 
+int playMode = 0;
+
+//ints and doubles
+int paletkaStrona = 0;
+int paletkaStronaWroga = 0;
 
 
+double kierunek[2] = { 0, 1 };
 
 int wybranyElementMenu = 0;
 
@@ -30,14 +38,10 @@ int iloscPowtorzenWroga[2] = {0,0};
 
 double pilka[2] = { 50, 75 };
 
-int paletkaGracza[2] = {50,140};
+int paletkaGracza[4] = {50,140};
 
 int paletkaWroga[2] = {50,10};
 
-int test = 1;
-
-int odbicieBool = 0;
-int odbicieWrogaBool = 0;
 
 
 double przechowanaWartoscDlaKierunku = 0;
@@ -262,6 +266,7 @@ int odbijanieIPchanie() {
         if (przechowanaWartoscDlaKierunku <= 1 && przechowanaWartoscDlaKierunku >= 0) {
             kierunek[1] = -1;
             kierunek[0] = 0;
+
         }
 
         if (przechowanaWartoscDlaKierunku >= 2 || przechowanaWartoscDlaKierunku <= -2 ) {
@@ -293,9 +298,10 @@ int odbijanieIPchanie() {
         kierunek[1] = ((1 / przechowanaWartoscDlaKierunkuWroga  ) * dodatek * -1); /// 1.5;  //
 
         if (przechowanaWartoscDlaKierunkuWroga <= 1 && przechowanaWartoscDlaKierunkuWroga >= 0) {
-            kierunek[1] = -1;
-            kierunek[0] = 0;
+            //kierunek[1] = kierunek[1] * -1;
+            kierunek[0] = kierunek[0] * -1;
         }
+
 
         if (przechowanaWartoscDlaKierunkuWroga >= 2 || przechowanaWartoscDlaKierunkuWroga <= -2 ) {
 
@@ -310,7 +316,7 @@ int odbijanieIPchanie() {
 
         odbicieWrogaBool = 0;
 
-        kierunek[0] = kierunek[0];
+
         kierunek[1] = kierunek[1] * -1;
 
     }
@@ -361,6 +367,45 @@ int paletkiMeow() {
 
     paletkaStrona = 0;
 
+
+    if (playMode) {
+        if (paletkaStronaWroga == 1) {
+
+            if (iloscPowtorzenWroga[0] < 5) {
+                iloscPowtorzenWroga[0]++;
+            }
+
+
+            paletkaWroga[0] = paletkaWroga[0] - 1 * iloscPowtorzenWroga[0];
+
+            if (paletkaWroga[0] < 8) {
+                paletkaWroga[0] = 8;
+            }
+
+        }
+        else if (paletkaStronaWroga == 2)
+        {
+
+            if (iloscPowtorzenWroga[1] < 5) {
+                iloscPowtorzenWroga[1]++;
+            }
+
+            paletkaWroga[0] = paletkaWroga[0] + 1 * iloscPowtorzenWroga[1];
+
+            if (paletkaWroga[0] > 91) {
+                paletkaWroga[0] = 91;
+            }
+
+        }
+        else
+        {
+            iloscPowtorzenWroga[0] = 0;
+            iloscPowtorzenWroga[1] = 0;
+        }
+
+        paletkaStronaWroga = 0;
+    }
+
 }
 
 
@@ -403,6 +448,13 @@ int main() {
 
         if (!czyGraOdpalona) {
 
+            //kropki
+
+            SDL_SetRenderDrawColor(renderer, 59, 77, 255, 255);
+            for (int i = 1; i < playMode + 2; i++)
+            {
+             SDL_RenderDrawPoint(renderer, i+75, 71  );
+            }
 
 
         //Buttons
@@ -431,7 +483,6 @@ int main() {
         }
 
             //Napisy
-
 
 
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -486,25 +537,10 @@ int main() {
 
             }
 
-
-
-
-
-
         }
         else  {
 
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-
-            //Ustawienia Wszystkiego na Czarno
-            // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            // for (int i = 0; i < 150; i++) {
-            //     for (int j = 0; j < 100; j++) {
-            //         SDL_RenderDrawPoint(renderer, i, j);
-            //     }
-            // }
-
 
             //obramowki
             SDL_SetRenderDrawColor(renderer, 90, 90, 0, 255);
@@ -568,13 +604,9 @@ int main() {
                     }
                 }
             }
-
-
             //paletki
 
             paletkiMeow();
-
-
             for (int i = -8; i < 9; i++) {
                 SDL_RenderDrawPoint(renderer, paletkaGracza[1]+1, paletkaGracza[0]+i);
                 SDL_RenderDrawPoint(renderer, paletkaGracza[1], paletkaGracza[0]+i);
@@ -582,19 +614,12 @@ int main() {
                 SDL_RenderDrawPoint(renderer, paletkaWroga[1]-1, paletkaWroga[0]+i);
                 SDL_RenderDrawPoint(renderer, paletkaWroga[1], paletkaWroga[0]+i);
             }
-
-
             //odbijaniePrzeciwnika
-            odbijaniePrzeciwnika();
+            if (!playMode) {
+                odbijaniePrzeciwnika();
+            }
 
-
-
-            //nyga
-            //for (int i = 0; i < 10; i++) {
             odbijaniePilki();
-
-
-
             //testowy migający piksel
 
             if (test) {
@@ -649,7 +674,7 @@ int main() {
                 if (zdarzenie.key.keysym.sym == SDLK_w) {
                     paletkaStrona = 1;
                     wybranyElementMenu--;
-                    if (wybranyElementMenu < 0) {
+                    if (wybranyElementMenu < 0 && !czyGraOdpalona) {
                         wybranyElementMenu = 1;
                     }
                 }
@@ -657,9 +682,21 @@ int main() {
                 {
                     paletkaStrona = 2;
                     wybranyElementMenu++;
-                    if (wybranyElementMenu > 1) {
+                    if (wybranyElementMenu > 1 && !czyGraOdpalona) {
                         wybranyElementMenu = 0;
                     }
+                }
+                else if (zdarzenie.key.keysym.sym == SDLK_UP) {
+                    paletkaStronaWroga = 1;
+                }
+                else if (zdarzenie.key.keysym.sym == SDLK_DOWN) {
+                    paletkaStronaWroga = 2;
+                }
+                else if (zdarzenie.key.keysym.sym == SDLK_a) {
+                    paletkaGracza[1]--;
+                }
+                else if (zdarzenie.key.keysym.sym == SDLK_d) {
+                    paletkaGracza[1]++;
                 }
                 else if (zdarzenie.key.keysym.sym == SDLK_r) {
                     resetGry();
@@ -672,6 +709,18 @@ int main() {
                         resetGry();
                         czyGraOdpalona = 1;
                     }
+
+                    else  {
+                        if (playMode == 0) {
+                            playMode = 1;
+                            printf("dgdfg");
+                        }
+                        else if (playMode == 1) {
+                            playMode = 0;
+                            printf("dgdfggdfg");
+                        }
+                    }
+
                 }
 
             }
