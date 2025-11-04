@@ -96,7 +96,7 @@ pingPong_EXTERNAL_OBJECTS =
 pingPong: CMakeFiles/pingPong.dir/main.c.o
 pingPong: CMakeFiles/pingPong.dir/build.make
 pingPong: CMakeFiles/pingPong.dir/compiler_depend.ts
-pingPong: /usr/lib/libSDL2-2.0.so.0.3200.56
+pingPong: /usr/lib/libSDL2-2.0.so.0.3200.58
 pingPong: CMakeFiles/pingPong.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/au/CLionProjects/pingPong/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable pingPong"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/pingPong.dir/link.txt --verbose=$(VERBOSE)

@@ -73,11 +73,15 @@ int resetGry() {
 
 int odbijaniePilki() {
     for (int i = -8; i < 9; i++) {
-        for (int s = -4; s < 4; s++) {
-            for (int w = -4; w < 4; w++)
+        for (int sx = -4; sx < 4; sx++) {
+            for (int wx = -4; wx < 4; wx++)
             {
-                for (int a = -4; a < 4; a++) {
+                for (int ax = -4; ax < 4; ax++) {
 
+                    int w = wx;
+                    int s = sx;
+                    int a = ax;
+                    
                     if (s == -4) {
                         s = 0;
                     }

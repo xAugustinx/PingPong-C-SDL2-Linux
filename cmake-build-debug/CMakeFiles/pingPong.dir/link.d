@@ -3,7 +3,7 @@ pingPong: \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o \
   CMakeFiles/pingPong.dir/main.c.o \
-  /usr/lib/libSDL2-2.0.so.0.3200.56 \
+  /usr/lib/libSDL2-2.0.so.0.3200.58 \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/libgcc.a \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libgcc_s.so \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libgcc_s.so \
@@ -34,7 +34,7 @@ pingPong: \
 
 CMakeFiles/pingPong.dir/main.c.o:
 
-/usr/lib/libSDL2-2.0.so.0.3200.56:
+/usr/lib/libSDL2-2.0.so.0.3200.58:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/libgcc.a:
 
